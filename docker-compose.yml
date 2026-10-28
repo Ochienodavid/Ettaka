@@ -1,0 +1,14 @@
+# Optional: run PostgreSQL in Docker instead of installing it locally.
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: ettaka
+      POSTGRES_PASSWORD: ettaka
+      POSTGRES_DB: ettaka
+    ports:
+      - "5432:5432"
+    volumes:
+      - ettaka-db:/var/lib/postgresql/data
+volumes:
+  ettaka-db:
