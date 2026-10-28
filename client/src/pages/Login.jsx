@@ -45,6 +45,7 @@ export default function Login() {
   return (
     <div className="login">
       <div className="login-art">
+        <img className="login-photo" src="/images/community-land.jpg" alt="Community members standing together outdoors" />
         <Brand />
         <h1>Welcome to <span>Ettaka</span></h1>
         <p className="lead">Record land agreements, map boundaries, seal evidence and resolve disputes, all in one place trusted by families, LC officials and mediators.</p>

@@ -407,6 +407,11 @@ select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmln
 .map-legend { position: absolute; bottom: 14px; left: 14px; z-index: 500; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; box-shadow: var(--shadow); padding: 10px 12px; font-size: 0.78rem; display: flex; flex-direction: column; gap: 5px; }
 .map-legend span { display: flex; align-items: center; gap: 7px; color: var(--text-2); }
 .map-legend i { width: 14px; height: 10px; border-radius: 3px; display: inline-block; border: 2px solid; }
+.map-context-image { display: block; width: 100%; height: 118px; object-fit: cover; opacity: 0.88; }
+.context-banner { display: flex; align-items: center; gap: 16px; margin: 0 0 20px; padding: 10px; border: 1px solid var(--border); border-radius: 16px; background: var(--surface); box-shadow: var(--shadow-sm); }
+.context-banner img { width: 150px; height: 76px; object-fit: cover; border-radius: 10px; }
+.context-banner strong, .context-banner span { display: block; }
+.context-banner span { color: var(--muted); font-size: 0.85rem; margin-top: 3px; }
 .dark-tiles .leaflet-tile { filter: brightness(0.75) contrast(1.1) saturate(0.85); }
 
 /* ---------------------------------------------------------------- stepper (wizard) */
@@ -560,9 +565,12 @@ select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmln
 .float-card strong { display: block; font-size: 1.05rem; color: var(--text); }
 @keyframes floaty { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
 .features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 30px 0; }
-.feature { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 22px; box-shadow: var(--shadow); }
-.feature h4 { margin: 14px 0 6px; font-size: 1rem; }
+.feature { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 12px; box-shadow: var(--shadow); overflow: hidden; }
+.feature-image { width: 100%; height: 132px; display: block; object-fit: cover; border-radius: 11px; }
+.feature-heading { display: flex; align-items: center; gap: 10px; padding: 14px 10px 0; }
+.feature-heading h4 { margin: 0; font-size: 1rem; }
 .feature p { color: var(--muted); font-size: 0.88rem; margin: 0; }
+.feature > p { padding: 8px 10px 10px; }
 .section-title { text-align: center; margin: 64px auto 26px; max-width: 680px; }
 .section-title h2 { font-size: 2rem; letter-spacing: -0.02em; margin: 10px 0; }
 .section-title p { color: var(--muted); font-size: 1rem; }
@@ -586,6 +594,8 @@ select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmln
 
 .login { display: grid; grid-template-columns: 1.05fr 1fr; min-height: 100vh; }
 .login-art { background: linear-gradient(160deg, #eef3ff 0%, #f8f5ea 100%); padding: 40px 56px; display: flex; flex-direction: column; position: relative; overflow: hidden; }
+.login-photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.14; mix-blend-mode: multiply; }
+.login-art > *:not(.login-photo) { position: relative; z-index: 1; }
 [data-theme='dark'] .login-art { background: linear-gradient(160deg, #101a33 0%, #1a1a12 100%); }
 .login-art h1 { font-size: 2.6rem; letter-spacing: -0.03em; margin: 44px 0 12px; font-weight: 800; line-height: 1.1; }
 .login-art h1 span { color: var(--primary); }

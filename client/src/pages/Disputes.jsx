@@ -58,6 +58,10 @@ export default function Disputes() {
         <Stat icon={TrendingUp} color="green" label="Resolved" value={resolved.length} foot={<span className="trend up"><span>{all.length ? Math.round((resolved.length / all.length) * 100) : 0}% resolution rate</span></span>} />
         <Stat icon={Timer} color="blue" label="Average days to resolve" value={avgDays} unit="days" foot={<span className="trend flat"><span>vs years in court</span></span>} />
       </div>
+      <div className="context-banner">
+        <img src="/images/mediation.jpg" alt="People collaborating around a table" />
+        <div><strong>Evidence-led mediation</strong><span>Move from a disputed boundary to a documented, accountable resolution.</span></div>
+      </div>
 
       <div className="stack">
         <Card flush>

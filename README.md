@@ -36,6 +36,10 @@ Ettaka is a voice-first land rights evidence platform. A citizen can record a tr
 
 The platform does not claim to use Firebase or Flutter; the rubric lists them as examples, while Ettaka’s meaningful Google integration is Gemini plus optional Google Maps Platform.
 
+### Visual assets
+
+The public-facing experience uses locally bundled Unsplash photographs for community, land, mapping, evidence and mediation imagery. They are presentation assets only; user-uploaded identity and evidence photographs remain separate, access-controlled application data.
+
 | Layer | Technology |
 |---|---|
 | **P**ostgreSQL | Records, parties, witnesses, evidence, the append-only seal ledger (enforced by a trigger), disputes, verification log, audit trail, notifications, settings |

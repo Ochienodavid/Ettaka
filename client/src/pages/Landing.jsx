@@ -12,12 +12,12 @@ import { Tile } from '../components/ui.jsx';
 const Hero3D = lazy(() => import('../three/Hero3D.jsx'));
 
 const FEATURES = [
-  { icon: Mic, c: 'blue', t: 'Voice-first agreements', d: 'Parties speak the terms in Luganda or English. Gemini drafts a clear bilingual agreement for review.' },
-  { icon: Map, c: 'green', t: 'GPS boundary walk', d: 'Walk the boundary with a phone. Ettaka records every corner, the area and photos of boundary marks.' },
-  { icon: Fingerprint, c: 'purple', t: 'Tamper-evident seal', d: 'Each record is SHA-256 fingerprinted and chained in an append-only ledger. Any edit is detected.' },
-  { icon: ShieldCheck, c: 'orange', t: 'Spousal consent guard', d: 'Family land cannot be sealed for sale without the spouse\'s consent, as the Land Act requires.' },
-  { icon: Blocks, c: 'red', t: 'Double-sale detection', d: 'New boundaries are checked against every recorded plot. Overlaps are flagged before money changes hands.' },
-  { icon: Scale, c: 'teal', t: 'Mediation pipeline', d: 'Disputes move from LC review to court-annexed mediation with a complete, verifiable evidence pack.' },
+  { icon: Mic, image: '/images/community-land.jpg', c: 'blue', t: 'Voice-first agreements', d: 'Parties speak the terms in Luganda or English. Gemini drafts a clear bilingual agreement for review.' },
+  { icon: Map, image: '/images/aerial-land.jpg', c: 'green', t: 'GPS boundary walk', d: 'Walk the boundary with a phone. Ettaka records every corner, the area and photos of boundary marks.' },
+  { icon: Fingerprint, image: '/images/document-evidence.jpg', c: 'purple', t: 'Tamper-evident seal', d: 'Each record is SHA-256 fingerprinted and chained in an append-only ledger. Any edit is detected.' },
+  { icon: ShieldCheck, image: '/images/community-land.jpg', c: 'orange', t: 'Spousal consent guard', d: 'Family land cannot be sealed for sale without the spouse\'s consent, as the Land Act requires.' },
+  { icon: Blocks, image: '/images/mapping-phone.jpg', c: 'red', t: 'Double-sale detection', d: 'New boundaries are checked against every recorded plot. Overlaps are flagged before money changes hands.' },
+  { icon: Scale, image: '/images/mediation.jpg', c: 'teal', t: 'Mediation pipeline', d: 'Disputes move from LC review to court-annexed mediation with a complete, verifiable evidence pack.' },
 ];
 const SDGS = [
   [16, 'Peace, Justice and Strong Institutions', '#00689D'], [1, 'No Poverty', '#E5243B'], [5, 'Gender Equality', '#FF3A21'], [2, 'Zero Hunger', '#DDA63A'],
@@ -73,7 +73,11 @@ export default function Landing() {
         </div>
         <div className="features">
           {FEATURES.map((f) => (
-            <div className="feature" key={f.t}><Tile icon={f.icon} color={f.c} /><h4>{f.t}</h4><p>{f.d}</p></div>
+            <div className="feature" key={f.t}>
+              <img className="feature-image" src={f.image} alt="" loading="lazy" />
+              <div className="feature-heading"><Tile icon={f.icon} color={f.c} /><h4>{f.t}</h4></div>
+              <p>{f.d}</p>
+            </div>
           ))}
         </div>
 

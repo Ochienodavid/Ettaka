@@ -75,6 +75,7 @@ export default function LandMap() {
             <span className="small muted" style={{ marginLeft: 'auto' }}><Layers size={14} style={{ verticalAlign: -2 }} /> Click a plot for details</span>
           </div>
           <div style={{ position: 'relative' }}>
+            <img className="map-context-image" src="/images/aerial-land.jpg" alt="Aerial view of cultivated land" />
             <MapContainer center={[1.37, 32.29]} zoom={7} style={{ height: 620, borderRadius: 0, border: 0 }} className={`map ${theme === 'dark' && layer === 'streets' ? 'dark-tiles' : ''}`}>
               {layer === 'satellite'
                 ? <TileLayer attribution="Tiles &copy; Esri" url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}" maxZoom={19} />
