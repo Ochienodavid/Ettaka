@@ -6,6 +6,36 @@ Ettaka turns undocumented, oral land holdings into tamper-evident digital eviden
 
 Built for the **Pre-DevFest Hackathon Kampala 2026**. Primary goal: SDG 16. Linked goals: SDGs 1, 2, 5, 8, 10, 15 and 17.
 
+## Hackathon submission brief
+
+### Problem
+
+In Uganda and across Africa, land rights are often supported by oral agreements, witnesses, handwritten papers and locally understood boundaries rather than a single accessible digital record. When evidence is lost, altered or duplicated, families face land grabbing, double sales, exclusion of women from land decisions and disputes that are difficult to resolve. The people most affected are citizens, especially women and families relying on customary or informal tenure, while local leaders, mediators, lenders and courts need a dependable way to inspect the available evidence.
+
+### Solution and user impact
+
+Ettaka is a voice-first land rights evidence platform. A citizen can record a transaction in English or Luganda, capture the plot boundary, add parties, witnesses, consent evidence and photographs, then review and seal the record. The system compares the new boundary with existing plots and raises a live overlap warning before a potential double sale is completed. If a dispute arises, an LC1 official or mediator can move it through a tracked case workflow, schedule a session and preserve the evidence pack. A buyer, lender, mediator or court can scan a QR code or enter a record code to check authenticity, open disputes, boundary conflicts and the verification history.
+
+ Ettaka is an evidence and accountability layer, not a replacement for an official land title. AI-generated text is reviewable before sealing, and legal guidance is clearly presented as informational.
+
+### Judging-criteria alignment
+
+| Criterion | How Ettaka meets it | Demonstrable evidence |
+|---|---|---|
+| **SDG Impact — 30%** | Directly addresses access to justice and accountable institutions under **SDG 16**, while supporting SDGs 1, 2, 5, 8, 10, 15 and 17. The product protects customary land evidence, improves women’s visibility in land records, and makes disputes and verification measurable. | Landing-page impact figures, SDG scorecard, gender and tenure reporting, dispute pipeline, audit trail and verification log. |
+| **Use of Google Tools — 25%** | Google Gemini is used for speech transcription, Luganda/English translation, bilingual agreement drafting, old-document understanding, structured extraction and grounded rights assistance. Google Maps Platform can provide satellite/street mapping and boundary visualization. | `@google/genai`, `gemini-2.5-flash`, the Voice Terms step, Old Papers digitization, Know My Rights assistant and Google Maps boundary provider. |
+| **Technical Execution — 20%** | The core flow is implemented end to end: authenticate, create a record, capture evidence and boundary, detect overlaps, enforce consent blockers, draft an agreement, seal it, verify it publicly and route disputes to mediation. | Six-step New Record wizard, live overlap flags, append-only PostgreSQL seal ledger, SHA-256 evidence fingerprints, QR verification and Ledger Explorer. |
+| **Feasibility & Scale — 15%** | The modular PERN architecture separates the React client, Express API and PostgreSQL data layer. AI and mapping providers are configurable, uploads have limits, role-based access controls visibility, and the system has deterministic fallbacks for a reliable demo. The next production steps are external ledger anchoring, Cloud Storage retention and managed deployment. | `server/src/routes`, PostgreSQL schema and trigger, configurable environment variables, Docker Compose, pagination, audit logging and documented production hardening. |
+| **Pitch — 10%** | The three-minute demo follows a clear human story: protect a family kibanja, catch a double sale, complete a consent-aware record, verify it, demonstrate tamper detection and show the justice and SDG impact workflows. | The scripted demo below, seeded story records and public verification portal. |
+
+### Google technologies used meaningfully
+
+- **Google Gemini API via `@google/genai` and Gemini 2.5 Flash:** transcribes recorded English/Luganda speech, translates and drafts bilingual agreements, reads photographed historical documents, extracts structured fields and answers rights questions using retrieved entries from Ettaka’s Ugandan legal library.
+- **Google Maps Platform:** optionally renders satellite/street maps and supports location and boundary visualization when `VITE_GOOGLE_MAPS_API_KEY` is configured. OpenStreetMap and Esri imagery remain available as a provider fallback.
+- **Google AI Studio:** provides the server-side `GEMINI_API_KEY`; secrets stay on the API server and are not exposed in the browser.
+
+The platform does not claim to use Firebase or Flutter; the rubric lists them as examples, while Ettaka’s meaningful Google integration is Gemini plus optional Google Maps Platform.
+
 | Layer | Technology |
 |---|---|
 | **P**ostgreSQL | Records, parties, witnesses, evidence, the append-only seal ledger (enforced by a trigger), disputes, verification log, audit trail, notifications, settings |
