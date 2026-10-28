@@ -19,6 +19,22 @@ function canonical(value) {
 
 const fileHash = (filename) => sha256(fs.readFileSync(path.join(UPLOAD_DIR, filename)));
 
+async function verifyEvidenceFiles(db, recordId) {
+  const { rows } = await db.query(
+    'SELECT filename, sha256 FROM evidence WHERE record_id = $1',
+    [recordId]
+  );
+  let valid = true;
+  for (const file of rows) {
+    try {
+      if (fileHash(file.filename) !== file.sha256) valid = false;
+    } catch {
+      valid = false;
+    }
+  }
+  return { valid, count: rows.length };
+}
+
 // The exact content a seal commits to.
 async function buildPayload(db, recordId) {
   const { rows: [r] } = await db.query('SELECT * FROM records WHERE id = $1', [recordId]);
@@ -79,12 +95,8 @@ async function verifyRecord(db, recordId) {
   const chainOk = seal.prev_hash === (prev ? prev.seal_hash : GENESIS);
   checks.push({ id: 'chain', label: 'Linked correctly to the previous ledger entry', ok: chainOk });
 
-  const files = (await db.query('SELECT filename, sha256 FROM evidence WHERE record_id = $1', [recordId])).rows;
-  let filesOk = true;
-  for (const f of files) {
-    try { if (fileHash(f.filename) !== f.sha256) filesOk = false; } catch { filesOk = false; }
-  }
-  checks.push({ id: 'files', label: `Evidence files unaltered (${files.length})`, ok: filesOk });
+  const files = await verifyEvidenceFiles(db, recordId);
+  checks.push({ id: 'files', label: `Evidence files unaltered (${files.count})`, ok: files.valid });
 
   const changes = contentOk ? [] : diffPayload(seal.payload, current);
   return {
@@ -149,11 +161,13 @@ async function verifyLedger(db) {
     const linkOk = s.prev_hash === prev;
     const current = await buildPayload(db, s.record_id);
     const contentOk = computeSeal(current, s.prev_hash, at) === s.seal_hash;
-    const ok = entryOk && linkOk && contentOk;
+    const files = await verifyEvidenceFiles(db, s.record_id);
+    const ok = entryOk && linkOk && contentOk && files.valid;
     if (!ok && brokenAt === null) brokenAt = s.id;
     blocks.push({
       position: s.id, code: s.code, title: s.title, record_id: s.record_id, seal_hash: s.seal_hash, prev_hash: s.prev_hash,
-      sealed_at: at, sealed_by: s.sealed_by_name, entry_ok: entryOk, link_ok: linkOk, content_ok: contentOk, ok,
+      sealed_at: at, sealed_by: s.sealed_by_name, entry_ok: entryOk, link_ok: linkOk, content_ok: contentOk,
+      files_ok: files.valid, evidence_count: files.count, ok,
     });
     prev = s.seal_hash;
   }

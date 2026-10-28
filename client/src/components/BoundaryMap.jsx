@@ -82,7 +82,7 @@ function loadGoogle() {
   });
   return googleLoader;
 }
-function GoogleMap({ points, editable, onChange, height, me, satellite }) {
+function GoogleMap({ points, editable, onChange, height, me, satellite, others = [] }) {
   const el = useRef(null);
   const st = useRef({});
   const pointsRef = useRef(points);
@@ -98,17 +98,36 @@ function GoogleMap({ points, editable, onChange, height, me, satellite }) {
         zoom: points.length ? 18 : 13, mapTypeId: satellite ? 'hybrid' : 'roadmap', streetViewControl: false, fullscreenControl: false,
       });
       const poly = new maps.Polygon({ map, strokeColor: '#B8922A', strokeWeight: 3, fillColor: '#E3C877', fillOpacity: 0.3, editable: Boolean(editable) });
-      st.current = { maps, map, poly, fitted: false };
+      st.current = { maps, map, poly, otherPolys: [], fitted: false };
       if (editable) {
         map.addListener('click', (e) => onChange([...pointsRef.current, [round(e.latLng.lat()), round(e.latLng.lng())]]));
         const sync = () => onChange(poly.getPath().getArray().map((ll) => [round(ll.lat()), round(ll.lng())]));
         st.current.sync = sync;
       }
       draw();
+      drawOthers();
     }).catch((e) => setErr(e.message));
     return () => { cancelled = true; };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  function drawOthers() {
+    const { maps, map } = st.current;
+    if (!maps || !map) return;
+    st.current.otherPolys?.forEach((polygon) => polygon.setMap(null));
+    st.current.otherPolys = others
+      .filter((other) => Array.isArray(other.boundary) && other.boundary.length >= 3)
+      .map((other) => new maps.Polygon({
+        map,
+        paths: other.boundary.map(([lat, lng]) => ({ lat, lng })),
+        strokeColor: other.conflict ? '#dc2626' : '#94a3b8',
+        strokeOpacity: 1,
+        strokeWeight: 2,
+        fillColor: other.conflict ? '#dc2626' : '#94a3b8',
+        fillOpacity: other.conflict ? 0.25 : 0.12,
+        clickable: true,
+      }));
+  }
 
   function draw() {
     const { maps, map, poly, sync } = st.current;
@@ -124,6 +143,7 @@ function GoogleMap({ points, editable, onChange, height, me, satellite }) {
     }
   }
   useEffect(draw, [points]);
+  useEffect(drawOthers, [others]);
   useEffect(() => { if (me && st.current.map) { st.current.map.setCenter({ lat: me[0], lng: me[1] }); st.current.map.setZoom(19); } }, [me]);
   useEffect(() => { st.current.map?.setMapTypeId(satellite ? 'hybrid' : 'roadmap'); }, [satellite]);
 

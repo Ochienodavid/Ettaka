@@ -139,6 +139,19 @@ Story records:
 - Set `GEMINI_API_KEY` in `server/.env`. To use a different model, set `GEMINI_MODEL` (the default is `gemini-2.5-flash`).
 - Set `VITE_GOOGLE_MAPS_API_KEY` in `client/.env` to switch the boundary map to Google Maps Platform.
 
+For the hackathon judging demo, configure both keys before starting the application so the Google-powered flows are visible:
+
+```bash
+copy server/.env.example server/.env
+copy client/.env.example client/.env
+# Add GEMINI_API_KEY to server/.env
+# Add VITE_GOOGLE_MAPS_API_KEY to client/.env
+npm run build
+npm start
+```
+
+Use the **Voice Terms**, **Old Papers**, **Know My Rights**, and **Land Map** screens to demonstrate the integrations. The Settings → Integrations panel shows whether Gemini and Google Maps are connected. If credentials are unavailable, the documented fallbacks keep the product demo runnable but should not be presented as the live Google integration.
+
 Without keys, every feature still works using built-in fallbacks:
 - Agreements are drafted from a template, in English only.
 - The rights assistant returns matching legal provisions directly.
