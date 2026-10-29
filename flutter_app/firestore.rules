@@ -1,0 +1,17 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() { return request.auth != null; }
+    match /records/{recordId} {
+      allow read: if signedIn();
+      allow create: if signedIn();
+      allow update: if signedIn() && request.resource.data.diff(resource.data).affectedKeys()
+        .hasOnly(['title', 'district', 'village', 'plotDescription', 'evidenceStatus', 'updatedAt']);
+      allow delete: if false;
+      match /evidence/{evidenceId} { allow read, create: if signedIn(); allow update, delete: if false; }
+      match /seals/{sealId} { allow read: if signedIn(); allow create: if signedIn(); allow update, delete: if false; }
+    }
+    match /disputes/{disputeId} { allow read, create, update: if signedIn(); allow delete: if false; }
+    match /activity/{activityId} { allow read: if signedIn(); allow create: if signedIn(); allow update, delete: if false; }
+  }
+}

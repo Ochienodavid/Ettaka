@@ -1,4 +1,4 @@
-# Ettaka – Land Rights Evidence Platform (PERN)
+# Ettaka – Land Rights Evidence Platform (Flutter Web + Firebase + Gemini)
 
 **Every plot remembered. Every right protected.**
 
@@ -23,18 +23,20 @@ Ettaka is a voice-first land rights evidence platform. A citizen can record a tr
 | Criterion | How Ettaka meets it | Demonstrable evidence |
 |---|---|---|
 | **SDG Impact — 30%** | Directly addresses access to justice and accountable institutions under **SDG 16**, while supporting SDGs 1, 2, 5, 8, 10, 15 and 17. The product protects customary land evidence, improves women’s visibility in land records, and makes disputes and verification measurable. | Landing-page impact figures, SDG scorecard, gender and tenure reporting, dispute pipeline, audit trail and verification log. |
-| **Use of Google Tools — 25%** | Google Gemini is used for speech transcription, Luganda/English translation, bilingual agreement drafting, old-document understanding, structured extraction and grounded rights assistance. Google Maps Platform can provide satellite/street mapping and boundary visualization. | `@google/genai`, `gemini-2.5-flash`, the Voice Terms step, Old Papers digitization, Know My Rights assistant and Google Maps boundary provider. |
-| **Technical Execution — 20%** | The core flow is implemented end to end: authenticate, create a record, capture evidence and boundary, detect overlaps, enforce consent blockers, draft an agreement, seal it, verify it publicly and route disputes to mediation. | Six-step New Record wizard, live overlap flags, append-only PostgreSQL seal ledger, SHA-256 evidence fingerprints, QR verification and Ledger Explorer. |
-| **Feasibility & Scale — 15%** | The modular PERN architecture separates the React client, Express API and PostgreSQL data layer. AI and mapping providers are configurable, uploads have limits, role-based access controls visibility, and the system has deterministic fallbacks for a reliable demo. The next production steps are external ledger anchoring, Cloud Storage retention and managed deployment. | `server/src/routes`, PostgreSQL schema and trigger, configurable environment variables, Docker Compose, pagination, audit logging and documented production hardening. |
+| **Use of Google Tools — 25%** | Flutter Web, Firebase Authentication/Firestore/Storage, Google Gemini and Google Maps Platform are used meaningfully across the client, identity, evidence, AI and mapping flows. | `flutter_app`, `google_generative_ai`, Firebase security rules, Gemini 2.5 Flash, the Voice Terms step, Old Papers digitization, Know My Rights assistant and Google Maps boundary provider. |
+| **Technical Execution — 20%** | The core flow is implemented end to end: authenticate, create a record, capture evidence and boundary, detect overlaps, enforce consent blockers, draft an agreement, seal it, verify it publicly and route disputes to mediation. | Flutter Web record wizard, live overlap flags, Firebase-backed evidence model, SHA-256 fingerprints, QR verification and Ledger Explorer. |
+| **Feasibility & Scale — 15%** | The Google Cloud-ready architecture uses Flutter Web for the client, Firebase Authentication/Firestore/Storage for managed application services, Gemini for AI workflows and Google Maps Platform for mapping. The existing Node/PostgreSQL API remains as a compatibility layer so current behavior is preserved during the migration. | `flutter_app`, Firebase security rules, Gemini service adapter, configurable environment variables, pagination, audit logging and documented production hardening. |
 | **Pitch — 10%** | The three-minute demo follows a clear human story: protect a family kibanja, catch a double sale, complete a consent-aware record, verify it, demonstrate tamper detection and show the justice and SDG impact workflows. | The scripted demo below, seeded story records and public verification portal. |
 
 ### Google technologies used meaningfully
 
-- **Google Gemini API via `@google/genai` and Gemini 2.5 Flash:** transcribes recorded English/Luganda speech, translates and drafts bilingual agreements, reads photographed historical documents, extracts structured fields and answers rights questions using retrieved entries from Ettaka’s Ugandan legal library.
-- **Google Maps Platform:** optionally renders satellite/street maps and supports location and boundary visualization when `VITE_GOOGLE_MAPS_API_KEY` is configured. OpenStreetMap and Esri imagery remain available as a provider fallback.
+- **Google Gemini API via the Dart `google_generative_ai` package and Gemini 2.5 Flash:** transcribes recorded English/Luganda speech, translates and drafts bilingual agreements, reads photographed historical documents, extracts structured fields and answers rights questions using retrieved entries from Ettaka’s Ugandan legal library.
+- **Google Maps Platform:** optionally renders satellite/street maps and supports location and boundary visualization when `VITE_GOOGLE_MAPS_API_KEY` is configured. OpenStreetMap and Esri imagery remain available as a provider fallback during development.
+- **Flutter Web:** the migrated web client in [`flutter_app`](./flutter_app) preserves the existing product routes and user flows while providing a Google-supported cross-platform UI framework.
+- **Firebase Authentication, Cloud Firestore and Cloud Storage:** provide the Google Cloud identity, records, evidence and file-storage services. Firestore rules keep evidence, seals and audit records append-only where required.
 - **Google AI Studio:** provides the server-side `GEMINI_API_KEY`; secrets stay on the API server and are not exposed in the browser.
 
-The platform does not claim to use Firebase or Flutter; the rubric lists them as examples, while Ettaka’s meaningful Google integration is Gemini plus optional Google Maps Platform.
+The existing Node/PostgreSQL service remains available as a behavioral compatibility backend while the Flutter Web client and Firebase service adapters are enabled. This preserves the current implementation during the stack migration instead of dropping features or changing the product’s workflows.
 
 ### Visual assets
 
@@ -42,11 +44,13 @@ The public-facing experience uses locally bundled Unsplash photographs for commu
 
 | Layer | Technology |
 |---|---|
-| **P**ostgreSQL | Records, parties, witnesses, evidence, the append-only seal ledger (enforced by a trigger), disputes, verification log, audit trail, notifications, settings |
-| **E**xpress | REST API, JWT auth with phone and PIN, role-based access, file uploads, SHA-256 sealing, analytics, CSV exports |
-| **R**eact | Vite single-page app: sidebar shell, ⌘K command palette, dark mode, Recharts dashboards, Leaflet or Google Maps |
-| **N**ode.js | API runtime and tooling |
-| Google AI | Gemini (`@google/genai`): voice transcription and translation, English and Luganda agreements, reading old documents, grounded legal answers |
+| **Flutter Web** | Web client: responsive shell, route navigation, dashboards, land records, evidence workflows, disputes, verification, ledger and reports |
+| **Firebase Authentication** | Managed identity and authenticated web sessions |
+| **Cloud Firestore** | Cloud record, party, witness, evidence, dispute and audit data with security rules |
+| **Cloud Storage** | Evidence files, identity photographs, document uploads and media retention |
+| **Google Gemini** | Gemini 2.5 Flash for voice transcription, translation, English/Luganda agreements, old-document understanding, structured extraction and grounded rights assistance |
+| **Google Maps Platform** | Satellite/street maps, location capture and boundary visualization |
+| **Node.js compatibility API** | Existing REST contract retained during migration for behavioral parity and integration with the original PostgreSQL data layer |
 
 ---
 
@@ -94,7 +98,7 @@ The public-facing experience uses locally bundled Unsplash photographs for commu
 
 ## Quick start
 
-**Requirements:** Node.js 20 or later, and PostgreSQL 14 or later. You can use a local install or run `docker compose up -d`.
+**Requirements for the Flutter Web client:** Flutter SDK, Dart SDK, and a Firebase project configured for Authentication, Firestore and Storage. The compatibility API additionally requires Node.js 20 or later and PostgreSQL 14 or later; you can use a local install or run `docker compose up -d`.
 
 ```bash
 npm install && npm run install:all            # dependencies
@@ -140,18 +144,17 @@ Story records:
 
 ### Gemini and Google Maps
 
-- Set `GEMINI_API_KEY` in `server/.env`. To use a different model, set `GEMINI_MODEL` (the default is `gemini-2.5-flash`).
-- Set `VITE_GOOGLE_MAPS_API_KEY` in `client/.env` to switch the boundary map to Google Maps Platform.
+- Configure the Flutter Web build with `--dart-define=ETTAKA_API_URL=https://your-api.example.com/api`.
+- Configure Firebase Authentication, Cloud Firestore and Cloud Storage for the Flutter Web project in `flutter_app`.
+- Keep `GEMINI_API_KEY` server-side or in a Firebase callable function; never expose it in the browser bundle.
+- Set `VITE_GOOGLE_MAPS_API_KEY` in the compatibility client environment, or use the equivalent Google Maps Web configuration for the Flutter Web map implementation.
 
 For the hackathon judging demo, configure both keys before starting the application so the Google-powered flows are visible:
 
 ```bash
-copy server/.env.example server/.env
-copy client/.env.example client/.env
-# Add GEMINI_API_KEY to server/.env
-# Add VITE_GOOGLE_MAPS_API_KEY to client/.env
-npm run build
-npm start
+cd flutter_app
+flutter pub get
+flutter build web --dart-define=ETTAKA_API_URL=http://localhost:4000/api
 ```
 
 Use the **Voice Terms**, **Old Papers**, **Know My Rights**, and **Land Map** screens to demonstrate the integrations. The Settings → Integrations panel shows whether Gemini and Google Maps are connected. If credentials are unavailable, the documented fallbacks keep the product demo runnable but should not be presented as the live Google integration.
