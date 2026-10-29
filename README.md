@@ -40,7 +40,18 @@ The existing Node/PostgreSQL service remains available as a behavioral compatibi
 
 ### Visual assets
 
-The public-facing experience uses locally bundled Unsplash photographs for community, land, mapping, evidence and mediation imagery. They are presentation assets only; user-uploaded identity and evidence photographs remain separate, access-controlled application data.
+The public-facing experience uses locally bundled Uganda-context photographs for community, land, mapping, evidence and mediation imagery. They are presentation assets only; user-uploaded identity and evidence photographs remain separate, access-controlled application data.
+
+### Image attribution
+
+The Uganda-context photographs in `client/public/images/` are Wikimedia Commons thumbnails and remain bundled locally for reliable hosting:
+
+- `community-land.jpg`: [Rakiga women from the village of Rushaga in Uganda dance](https://commons.wikimedia.org/wiki/File:Rakiga_women_from_the_village_of_Rushaga_in_Uganda_dance_in_the_village%27s_tourist_center_(1).jpg), by Hanay, CC BY-SA 3.0
+- `mediation.jpg`: [Wikimedia Community User Group Uganda strategy meeting](https://commons.wikimedia.org/wiki/File:Wikimedia_Community_User_Group_Uganda_Strategy_meeting_01.jpg), by NANTUMBWEJ, CC0
+- `mapping-phone.jpg`: [A farmer in Doho rice scheme](https://commons.wikimedia.org/wiki/File:A_farmer_in_Doho_rice_scheme.jpg), by Haumbaeric, CC BY-SA 4.0
+- `document-evidence.jpg`: [A farmer with harvested tomatoes](https://commons.wikimedia.org/wiki/File:A_farmer_with_harvested_tomatoes.jpg), by Emmanuel Ssekaggo, CC BY-SA 4.0
+
+Please retain the source-page licensing and author information when redistributing the bundled assets.
 
 | Layer | Technology |
 |---|---|
@@ -101,6 +112,8 @@ The public-facing experience uses locally bundled Unsplash photographs for commu
 **Requirements for the Flutter Web client:** Flutter SDK, Dart SDK, and a Firebase project configured for Authentication, Firestore and Storage. The compatibility API additionally requires Node.js 20 or later and PostgreSQL 14 or later; you can use a local install or run `docker compose up -d`.
 
 On Vercel, the Vite client is public at `/`, the Express API is public at `/api/*`, and uploaded evidence files are intentionally not exposed through a public rewrite. Upload access must be provided through an authenticated API or signed storage URL.
+
+The Vite client accepts `VITE_API_URL` at build time. Firebase Hosting currently serves the public client at [ettaka-devfest-2026.web.app](https://ettaka-devfest-2026.web.app). Set `VITE_API_URL` to the separately deployed Express API base URL before rebuilding and redeploying so login, records, disputes and other API-backed flows connect to production.
 
 ```bash
 npm install && npm run install:all            # dependencies
