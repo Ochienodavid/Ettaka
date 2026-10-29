@@ -3,6 +3,7 @@
 const { GoogleGenAI, Type } = require('@google/genai');
 
 const MODEL = process.env.GEMINI_MODEL || 'gemini-3.8-flash';
+const AI_TIMEOUT_MS = 8000;
 let client = null;
 function ai() {
   if (!process.env.GEMINI_API_KEY) return null;
@@ -10,6 +11,10 @@ function ai() {
   return client;
 }
 const enabled = () => Boolean(process.env.GEMINI_API_KEY);
+const withTimeout = (promise, ms) => Promise.race([
+  promise,
+  new Promise((_, reject) => setTimeout(() => reject(new Error(`Gemini request timed out after ${ms}ms`)), ms)),
+]);
 
 async function generateJSON({ system, parts, schema, temperature = 0.2 }) {
   const res = await ai().models.generateContent({
@@ -189,12 +194,12 @@ async function answerRights(question, passages, language = 'en') {
   const schema = { type: Type.OBJECT, properties: { answer: { type: Type.STRING } }, required: ['answer'] };
   const lang = language === 'lg' ? 'Luganda' : 'the same language as the question (English or Luganda)';
   try {
-    const out = await generateJSON({
+    const out = await withTimeout(generateJSON({
       system: `You are Ettaka's land rights assistant for ordinary people in Uganda. Answer in ${lang}, in short plain sentences a person with primary education understands. Use ONLY the provided passages; cite them inline like [Land Act, Section 39]. If the passages do not answer the question, say so. Give practical next steps (LC1, mediation, legal aid). End with one sentence saying this is general information, not legal advice.`,
       parts: [{ text: `Passages:\n${passages.map((p) => `[${p.source}, ${p.ref}] ${p.title}: ${p.text}`).join('\n')}\n\nQuestion: ${question}` }],
       schema,
       temperature: 0.3,
-    });
+    }), AI_TIMEOUT_MS);
     return { ai: true, citations, answer: out.answer };
   } catch (e) {
     const body = passages.map((p) => `• ${p.title} (${p.source}, ${p.ref}): ${p.text}`).join('\n\n');
