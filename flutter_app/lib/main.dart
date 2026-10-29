@@ -13,7 +13,7 @@ const navy = Color(0xff1f3864);
 const blue = Color(0xff2251b8);
 const gold = Color(0xffb8922a);
 const bg = Color(0xfff4f6fb);
-const apiBase = String.fromEnvironment('ETTAKA_API_URL', defaultValue: 'http://localhost:4000/api');
+const apiBase = String.fromEnvironment('ETTAKA_API_URL', defaultValue: '/api');
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -95,7 +95,7 @@ class AppState extends ChangeNotifier {
   Future<Map<String, dynamic>> _request(String path, {String method = 'GET', Map<String, dynamic>? body}) async {
     final headers = <String, String>{'Content-Type': 'application/json'};
     if (token != null) headers['Authorization'] = 'Bearer $token';
-    final uri = Uri.parse('$apiBase$path');
+    final uri = Uri.base.resolve('$apiBase$path');
     final response = method == 'POST'
         ? await http.post(uri, headers: headers, body: jsonEncode(body ?? const {}))
         : await http.get(uri, headers: headers);

@@ -100,6 +100,8 @@ The public-facing experience uses locally bundled Unsplash photographs for commu
 
 **Requirements for the Flutter Web client:** Flutter SDK, Dart SDK, and a Firebase project configured for Authentication, Firestore and Storage. The compatibility API additionally requires Node.js 20 or later and PostgreSQL 14 or later; you can use a local install or run `docker compose up -d`.
 
+On Vercel, the Vite client is public at `/`, the Express API is public at `/api/*`, and uploaded evidence files are intentionally not exposed through a public rewrite. Upload access must be provided through an authenticated API or signed storage URL.
+
 ```bash
 npm install && npm run install:all            # dependencies
 # create the database (skip if using docker compose)

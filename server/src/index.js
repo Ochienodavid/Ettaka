@@ -35,4 +35,8 @@ app.use((err, req, res, next) => {
 });
 
 const port = Number(process.env.PORT || 4000);
-app.listen(port, () => console.log(`Ettaka API listening on http://localhost:${port}`));
+if (require.main === module) {
+  app.listen(port, () => console.log(`Ettaka API listening on http://localhost:${port}`));
+}
+
+module.exports = app;

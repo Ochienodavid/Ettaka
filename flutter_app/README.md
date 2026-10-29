@@ -24,7 +24,7 @@ The record model maps to the existing implementation:
 5. Enable anonymous or phone authentication, Firestore, Storage, and App Check in Firebase Console.
 6. Store the Gemini API key in a server-side secret or Firebase callable function. Do not ship it in the Flutter bundle.
 
-The production web flow expects the existing API at `http://localhost:4000/api` (override with `--dart-define=ETTAKA_API_URL=https://your-host/api`). Firebase and Gemini adapters are included for the DevFest Google-tools stack; they must be configured before enabling those services in production. The Flutter client does not include Android or iOS runners.
+The production web flow uses the same-origin `/api` path by default, which is routed to the server service by the root `vercel.json`. For a separate API host, override it with `--dart-define=ETTAKA_API_URL=https://your-host/api`. Firebase and Gemini adapters are included for the DevFest Google-tools stack; they must be configured before enabling those services in production. The Flutter client does not include Android or iOS runners.
 
 ## Development
 
