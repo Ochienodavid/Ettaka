@@ -3,7 +3,7 @@
 const { GoogleGenAI, Type } = require('@google/genai');
 
 const MODEL = process.env.GEMINI_MODEL || 'gemini-3.8-flash';
-const AI_TIMEOUT_MS = 8000;
+const AI_TIMEOUT_MS = 3000;
 let client = null;
 function ai() {
   if (!process.env.GEMINI_API_KEY) return null;
