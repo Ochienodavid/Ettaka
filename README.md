@@ -111,7 +111,7 @@ Please retain the source-page licensing and author information when redistributi
 
 **Requirements for the Flutter Web client:** Flutter SDK, Dart SDK, and a Firebase project configured for Authentication, Firestore and Storage. The compatibility API additionally requires Node.js 20 or later and PostgreSQL 14 or later; you can use a local install or run `docker compose up -d`.
 
-On Vercel, the Vite client is public at `/`, the Express API is public at `/api/*`, and uploaded evidence files are intentionally not exposed through a public rewrite. Upload access must be provided through an authenticated API or signed storage URL.
+Firebase Hosting serves the public client at [ettaka-devfest-2026.web.app](https://ettaka-devfest-2026.web.app). The Express API is deployed separately at `https://ettaka.vercel.app/api/*`; uploaded evidence files are intentionally not exposed through a public rewrite. Upload access must be provided through an authenticated API or signed storage URL.
 
 The Vite client accepts `VITE_API_URL` at build time. Firebase Hosting currently serves the public client at [ettaka-devfest-2026.web.app](https://ettaka-devfest-2026.web.app). Set `VITE_API_URL` to the separately deployed Express API base URL before rebuilding and redeploying so login, records, disputes and other API-backed flows connect to production.
 
