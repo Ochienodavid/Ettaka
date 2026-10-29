@@ -3,8 +3,20 @@ import { createPortal } from 'react-dom';
 import {
   AlertTriangle, ArrowDownRight, ArrowUpRight, Check, CheckCircle2, ChevronLeft, ChevronRight, Info, ShieldAlert, ShieldCheck, ShieldQuestion, X, XCircle, Minus,
 } from 'lucide-react';
-import { avatarColor, fmtDateTime } from '../api';
+import { assetUrl, avatarColor, fmtDateTime } from '../api';
 import Portrait from './Portrait.jsx';
+import { guessGender } from './Portrait.jsx';
+
+const PROFILE_PHOTOS = {
+  female: ['/images/profiles/female-1.jpg', '/images/profiles/female-2.jpg', '/images/profiles/female-3.jpg', '/images/profiles/female-4.jpg'],
+  male: ['/images/profiles/male-1.jpg', '/images/profiles/male-2.jpg', '/images/profiles/male-3.jpg', '/images/profiles/male-4.jpg'],
+};
+
+function defaultProfilePhoto(name, gender) {
+  const bucket = (gender || guessGender(name)) === 'female' ? PROFILE_PHOTOS.female : PROFILE_PHOTOS.male;
+  const hash = [...name].reduce((value, char) => (value * 31 + char.charCodeAt(0)) >>> 0, 7);
+  return bucket[hash % bucket.length];
+}
 
 export function Card({ title, icon: Icon, sub, actions, children, className = '', flush, footer, ...rest }) {
   return (
@@ -67,10 +79,11 @@ const PX = { sm: 28, '': 36, lg: 48, xl: 64, xxl: 96 };
 export function Avatar({ name = '', size = '', src, gender }) {
   const [broken, setBroken] = useState(false);
   const px = PX[size] ?? 36;
+  const photo = assetUrl(src) || defaultProfilePhoto(name, gender);
   return (
     <div className={`avatar ${size ? `avatar-${size}` : ''}`} style={{ background: avatarColor(name), overflow: 'hidden', padding: 0 }} title={name}>
-      {src && !broken
-        ? <img src={src} alt={name} width={px} height={px} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} onError={() => setBroken(true)} />
+      {!broken
+        ? <img src={photo} alt={name} width={px} height={px} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} onError={() => setBroken(true)} />
         : <Portrait name={name} gender={gender} size={px} />}
     </div>
   );

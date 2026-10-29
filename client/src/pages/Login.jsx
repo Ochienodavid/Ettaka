@@ -1,6 +1,6 @@
 import { lazy, Suspense, useEffect, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { ArrowLeft, Eye, EyeOff, Fingerprint, Gavel, HeartHandshake, KeyRound, Landmark, LogIn, Phone, ShieldCheck, User, UserCog } from 'lucide-react';
+import { ArrowLeft, Eye, EyeOff, Fingerprint, HeartHandshake, KeyRound, LogIn, Phone, ShieldCheck, User } from 'lucide-react';
 import { api } from '../api';
 import { useAuth } from '../auth.jsx';
 import { usePage } from '../theme.jsx';
@@ -8,13 +8,13 @@ import Brand from '../components/Brand.jsx';
 import Illustration from '../components/Illustration.jsx';
 
 const Hero3D = lazy(() => import('../three/Hero3D.jsx'));
-import { Field, Tile } from '../components/ui.jsx';
+import { Avatar, Field, Tile } from '../components/ui.jsx';
 
 const DEMO = [
-  { phone: '0700000001', label: 'Citizen', sub: 'Nakato Sarah · widow', icon: User, c: 'gold' },
-  { phone: '0700000002', label: 'LC1 Official', sub: 'Namusoke Grace', icon: Landmark, c: 'blue' },
-  { phone: '0700000005', label: 'Mediator', sub: 'Akello Harriet', icon: Gavel, c: 'purple' },
-  { phone: '0700000004', label: 'Administrator', sub: 'Ochieno David', icon: UserCog, c: 'green' },
+  { phone: '0700000001', label: 'Citizen', name: 'Nakato Sarah', sub: 'widow', gender: 'female' },
+  { phone: '0700000002', label: 'LC1 Official', name: 'Namusoke Grace', sub: '', gender: 'female' },
+  { phone: '0700000005', label: 'Mediator', name: 'Akello Harriet', sub: '', gender: 'female' },
+  { phone: '0700000004', label: 'Administrator', name: 'Ochieno David', sub: '', gender: 'male' },
 ];
 
 export default function Login() {
@@ -87,7 +87,7 @@ export default function Login() {
           <div className="role-pick">
             {DEMO.map((d) => (
               <button key={d.phone} type="button" onClick={(e) => submit(e, d.phone)} disabled={busy}>
-                <Tile icon={d.icon} color={d.c} size="xs" /><div><strong>{d.label}</strong><span>{d.sub}</span></div>
+                <Avatar name={d.name} gender={d.gender} size="sm" /><div><strong>{d.label}</strong><span>{d.name}{d.sub && ` · ${d.sub}`}</span></div>
               </button>
             ))}
           </div>

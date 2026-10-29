@@ -1,5 +1,6 @@
 const TOKEN_KEY = 'ettaka.token';
 const API_BASE = (import.meta.env.VITE_API_URL || '/api').replace(/\/$/, '');
+export const assetUrl = (value) => value && value.startsWith('/') && API_BASE.startsWith('http') ? `${API_BASE.replace(/\/api$/, '')}${value}` : value;
 
 const store = {
   get: (k) => { try { return localStorage.getItem(k); } catch { return null; } },
