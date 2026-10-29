@@ -3,3 +3,5 @@ client/dist/
 server/uploads/*
 !server/uploads/.gitkeep
 .env
+
+.vercel

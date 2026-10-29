@@ -20,7 +20,7 @@
     {
       "source": "/(.*)",
       "destination": {
-        "service": "client"
+        "service": "server"
       }
     }
   ]
